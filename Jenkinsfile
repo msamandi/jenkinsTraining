@@ -18,8 +18,8 @@ node {
         	}
 
         	stage ('Push Inspect') {
-                docker.withRegistry('https://registry.hub.docker.com') {
-                    awesome_devops_image.push("${env.BRANCH_NUMBER}-latest")
+                docker.withRegistry('https://registry.hub.docker.com','docker-hub-credentials') {
+                    awesome_devops_image.push("${env.BRANCH_NAME}-latest")
                     awesome_devops_image.push()
                     currentBuild.description = "Tagged: ${awesome_devops_image_name}"
                 }
@@ -28,6 +28,7 @@ node {
         } catch (error) {
         	throw error
         }
+
 
 	}
 }
