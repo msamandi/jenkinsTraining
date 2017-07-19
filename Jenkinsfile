@@ -16,12 +16,17 @@ node {
      		stage ('Build awesome_devops image') {
                 awesome_devops_image = docker.build("${awesome_devops_image_name}", '.')
         	}
+        	stage('Test image') {
+        
+               awesome_devops_image.inside {
+                  sh 'echo "Tests passed"'
+               }
+            }
 
-        	stage ('Push Inspect') {
-                docker.withRegistry('https://registry.hub.docker.com','docker-hub-credentials') {
-                    awesome_devops_image.push("${env.BRANCH_NAME}-latest")
-                    awesome_devops_image.push()
-                    currentBuild.description = "Tagged: ${awesome_devops_image_name}"
+        	stage ('Push Image ') {
+                docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials-med') {
+                        awesome_devops_image.push("${env.BUILD_NUMBER}")
+                        awesome_devops_image.push("latest")
                 }
             }
 
